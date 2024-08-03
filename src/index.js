@@ -36,26 +36,61 @@ window.addEventListener("DOMContentLoaded", () => {
   divCross.innerHTML = `<h4>Add Task Here</h4>`;
   cross.append(divCross);
 
-  cross.addEventListener("click", createProject)
-
-
   function createDialog() {
-    return `<dialog id="newDialog">
+    return `
+  <div id="dialog">    
+    <dialog id="newDialog">
      <form method="dialog" class="myForm">
      <h1>Project</h1>
     <label>Project Name : <textarea></textarea></label>
      <input type="submit" value="add" id="add">
-    </form></dialog>`;
+    </form></dialog></div>`;
   }
-  function createProject() { main.innerHTML = createDialog();
-    const dialog = document.querySelector("dialog")
+  
+  cross.addEventListener("click", createProject);
+
+  const textArea = document.querySelector("textarea");
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    let content = createMainContent(textArea);
+    main.appendChild(content);
+    const dltBtn = document.querySelector(".delete");
+    const dial = document.getElementById("dialog");
+    const dialog = document.querySelector("dialog");
+
+    dltBtn.addEventListener("click", () => main.remove(event.currentTarget));
+    textArea.value = "";
+    dialog.close();
+    document.body.remove(dial)
+  });
+
+  function createProject() {
+    document.body.innerHTML += createDialog();
+    const dialog = document.querySelector("dialog");
+
+    const dial = document.getElementById("dialog");
+    dial.style.position = "absolute";
+    dial.style.zIndex = "1000";
     dialog.showModal();
-    const btn = document.querySelector("input[type='submit']");
-    btn.addEventListener("submit",(event)=>{
-      event.preventDefault();
-      dialog.close();}
-     )
   }
+
+  function createMainContent(textArea) {
+    const divMain = document.createElement("div");
+    divMain.innerHTML = `
+    <div class="project">
+     <p>Task</p>
+     <div class="task">
+     <p>${textArea.value}</p>
+     </div>
+     <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+
+      </div>`;
+    return divMain;
+  }
+
   function deleteProject() {}
   function editProject() {}
   function storeToLocalStorage() {}
