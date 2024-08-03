@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { optimize } = require("webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -11,18 +12,25 @@ module.exports = {
   mode: "development",
   devtool: "inline-source-map",
   module: {
-    rules: [{ test: /\.css$/i, use: ["style-loader", "css-loader"] }],
+    rules: [
+      { test: /\.css$/i, use: ["style-loader", "css-loader"] },
+      {
+        test: /\.(png|svg|jpe?g)$/i,
+        type: "asset/resource",
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "To Do App",
       template: "./src/index.html",
-      inject: "body",
     }),
   ],
   devServer: {
     static: {
       directory: path.resolve(__dirname, "dist"),
     },
+    watchFiles: ["src/**/*"], 
+    open: true,
   },
+
 };
