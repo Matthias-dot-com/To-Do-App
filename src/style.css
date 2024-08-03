@@ -70,11 +70,11 @@ Global Styles
 
 body {
     font-family: var(--ff-secondary);
-    background: var(--clr-grey-10);
+    background: var(--clr-grey-9);
     color: var(--clr-grey-1);
     line-height: 1.5;
     font-size: 0.875rem;
-    height: ;
+    height: 100vh;
 }
 
 ul {
@@ -169,6 +169,12 @@ p {
     border-color: var(--clr-primary-1);
 }
 
+textarea {
+    resize: none;
+    width: 400px;
+    height: 20px;
+    
+}
 
 /*
 =======================================================
@@ -176,8 +182,58 @@ p {
 =======================================================
 */
 .nav>nav {
-   background-color: black;
-    height: 2rem;
+    background-color: black;
+    height: 3rem;
     color: white;
 }
 
+.section .section-center {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    border: 1px solid var(--clr-black);
+    height: 90vh;
+    gap: 5px;
+}
+
+.side-bar {
+    border-right: 1px solid black;
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr;
+}
+
+.main {
+    border-left: 1px black solid;
+}
+
+#cross {
+    display: flex;
+    justify-content: space-around;
+}
+
+#cross img {
+    border: 1px white solid;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+}
+
+.project-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+#menu {
+    display: flex;
+    justify-content: space-around;
+}
+
+#menu img {
+    width: 50px;
+    height: 50px;
+}
+
+#menu p,
+#cross div {
+    padding-top: 20px;
+
+}

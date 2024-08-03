@@ -16,7 +16,16 @@ module.exports = {
       { test: /\.css$/i, use: ["style-loader", "css-loader"] },
       {
         test: /\.(png|svg|jpe?g)$/i,
-        type: "asset/resource",
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "assets/icons",
+              publicPath: "assets/icons",
+            },
+          },
+        ],
       },
     ],
   },
