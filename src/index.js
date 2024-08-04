@@ -72,7 +72,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("delete")) {
       handleDelete(e.target);
     } else if (e.target.classList.contains("edit")) {
-      handleEdit(e.currentTarget,e.target);
+      handleEdit(e.currentTarget, e.target);
     }
   });
 
@@ -80,10 +80,12 @@ window.addEventListener("DOMContentLoaded", () => {
     event.closest(".divMain").remove();
   }
 
-  function handleEdit(e,E) {
+  function handleEdit(e, E) {
     isEditing = true;
     editEvent = E;
-    let p = e.querySelector(".todo");
+
+    let p = E.closest(".divMain").querySelector(".todo");
+    console.log(p);
     textArea.value = p.textContent;
     createProject(isEditing, editEvent);
   }
@@ -102,9 +104,11 @@ window.addEventListener("DOMContentLoaded", () => {
      <button class="edit">Edit</button>
           <button class="delete">Delete</button>
       </div>`;
+      isEditing = false;
     }
 
     textArea.value = "";
+
     dialog.close();
   });
 
