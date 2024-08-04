@@ -4,6 +4,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const sideBar = document.querySelector(".side-bar");
   const main = document.querySelector(".main");
   const sideBarList = document.createElement("div");
+  // const dltDefBtn = main.querySelector("#delete");
+  // const editDefBtn = main.querySelector("#edit");
+
   sideBarList.classList.add("project-container");
 
   function generateImageElement(id, src) {
@@ -38,7 +41,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function createDialog() {
     return `
-  <div id="dialog">    
     <dialog id="newDialog">
      <form method="dialog" class="myForm">
      <h1>Project</h1>
@@ -46,38 +48,65 @@ window.addEventListener("DOMContentLoaded", () => {
      <input type="submit" value="add" id="add">
     </form></dialog></div>`;
   }
-  
+
   cross.addEventListener("click", createProject);
 
-  const textArea = document.querySelector("textarea");
-  const form = document.querySelector("form");
+  const divDialog = document.createElement("div");
 
+  divDialog.setAttribute("id", "dialog");
+
+  divDialog.innerHTML = createDialog();
+  const dialog = divDialog.querySelector("dialog");
+  const textArea = divDialog.querySelector("textarea");
+
+  const form = divDialog.querySelector("form");
+  divDialog.style.visibility = "hidden";
+
+  function createProject() {
+    document.body.appendChild(divDialog);
+
+    divDialog.style.visibility = "visible";
+    divDialog.style.zIndex = "1000";
+    dialog.showModal();
+  }
+  const dltBtn = document.querySelectorAll(".delete");
+  const editBtn = document.querySelectorAll(".edit");
+  main.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete")) {
+      handleDelete(e.target);
+    }
+  });
+
+  function handleDelete(event) {
+    event.closest(".divMain").remove();
+  }
+  // dltBtn.forEach((btn) =>
+  //   btn.addEventListener("click", (e) => {
+  //     e.stopPropagation();
+  //     e.currentTarget.closest(".divMain").remove();
+  //   })
+  // );
+  // dltDefBtn.addEventListener("click", (e) => {
+  //   e.stopPropagation();
+  //   e.currentTarget.closest(".divMain").remove();
+  // });
+  editBtn.forEach((btn) =>
+    btn.addEventListener("click", (e) => {
+      divDialog.style.visibility = "visible";
+      textArea.value = e.currentTarget;
+    })
+  );
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     let content = createMainContent(textArea);
     main.appendChild(content);
-    const dltBtn = document.querySelector(".delete");
-    const dial = document.getElementById("dialog");
-    const dialog = document.querySelector("dialog");
-
-    dltBtn.addEventListener("click", () => main.remove(event.currentTarget));
     textArea.value = "";
     dialog.close();
-    document.body.remove(dial)
   });
-
-  function createProject() {
-    document.body.innerHTML += createDialog();
-    const dialog = document.querySelector("dialog");
-
-    const dial = document.getElementById("dialog");
-    dial.style.position = "absolute";
-    dial.style.zIndex = "1000";
-    dialog.showModal();
-  }
 
   function createMainContent(textArea) {
     const divMain = document.createElement("div");
+    divMain.classList.add("divMain");
     divMain.innerHTML = `
     <div class="project">
      <p>Task</p>
@@ -90,7 +119,6 @@ window.addEventListener("DOMContentLoaded", () => {
       </div>`;
     return divMain;
   }
-
   function deleteProject() {}
   function editProject() {}
   function storeToLocalStorage() {}
