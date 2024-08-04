@@ -4,9 +4,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const sideBar = document.querySelector(".side-bar");
   const main = document.querySelector(".main");
   const sideBarList = document.createElement("div");
-  // const dltDefBtn = main.querySelector("#delete");
-  // const editDefBtn = main.querySelector("#edit");
-
+  let isEditing = false;
+  let editEvent = false;
   sideBarList.classList.add("project-container");
 
   function generateImageElement(id, src) {
@@ -62,44 +61,49 @@ window.addEventListener("DOMContentLoaded", () => {
   const form = divDialog.querySelector("form");
   divDialog.style.visibility = "hidden";
 
-  function createProject() {
+  function createProject(isEditing, editEvent) {
     document.body.appendChild(divDialog);
-
     divDialog.style.visibility = "visible";
     divDialog.style.zIndex = "1000";
     dialog.showModal();
   }
-  const dltBtn = document.querySelectorAll(".delete");
-  const editBtn = document.querySelectorAll(".edit");
+
   main.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
       handleDelete(e.target);
+    } else if (e.target.classList.contains("edit")) {
+      handleEdit(e.currentTarget,e.target);
     }
   });
 
   function handleDelete(event) {
     event.closest(".divMain").remove();
   }
-  // dltBtn.forEach((btn) =>
-  //   btn.addEventListener("click", (e) => {
-  //     e.stopPropagation();
-  //     e.currentTarget.closest(".divMain").remove();
-  //   })
-  // );
-  // dltDefBtn.addEventListener("click", (e) => {
-  //   e.stopPropagation();
-  //   e.currentTarget.closest(".divMain").remove();
-  // });
-  editBtn.forEach((btn) =>
-    btn.addEventListener("click", (e) => {
-      divDialog.style.visibility = "visible";
-      textArea.value = e.currentTarget;
-    })
-  );
+
+  function handleEdit(e,E) {
+    isEditing = true;
+    editEvent = E;
+    let p = e.querySelector(".todo");
+    textArea.value = p.textContent;
+    createProject(isEditing, editEvent);
+  }
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    let content = createMainContent(textArea);
-    main.appendChild(content);
+    if (!isEditing) {
+      let content = createMainContent(textArea);
+      main.appendChild(content);
+    } else {
+      editEvent.closest(".divMain").innerHTML = `
+    <div class="project">
+     <p>Task</p>
+     <div class="task">
+     <p class="todo">${textArea.value}</p>
+     </div>
+     <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+      </div>`;
+    }
+
     textArea.value = "";
     dialog.close();
   });
@@ -111,7 +115,7 @@ window.addEventListener("DOMContentLoaded", () => {
     <div class="project">
      <p>Task</p>
      <div class="task">
-     <p>${textArea.value}</p>
+     <p class="todo">${textArea.value}</p>
      </div>
      <button class="edit">Edit</button>
           <button class="delete">Delete</button>
@@ -119,8 +123,7 @@ window.addEventListener("DOMContentLoaded", () => {
       </div>`;
     return divMain;
   }
-  function deleteProject() {}
-  function editProject() {}
+
   function storeToLocalStorage() {}
   function removeFromLocalStorage() {}
 });
